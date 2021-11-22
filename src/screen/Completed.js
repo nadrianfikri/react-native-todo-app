@@ -7,6 +7,7 @@ import Content from '../components/Content';
 export default function Completed(props) {
   const [form, setForm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [show, setShow] = useState(false);
   const [tasks, setTasks] = useState([]);
 
   // Create LifeCycle
@@ -67,6 +68,7 @@ export default function Completed(props) {
     return (
       <Content
         //
+        show={show}
         text={item.body}
         onPress={() => props.navigation.navigate('DetailTask', item)}
         onDeletePress={() => handleDeleteButton(item.id)}
@@ -76,7 +78,7 @@ export default function Completed(props) {
 
   return (
     <View style={styles.container}>
-      <Header value={form} onChangeText={(text) => setForm(text)} onPress={handleSubmit} />
+      <Header value={form} onChangeText={(text) => setForm(text)} onPress={handleSubmit} onShowPress={() => setShow(!show)} />
       <View style={styles.wrapper}>
         {tasks.length > 0 ? (
           <FlatList data={tasks} keyExtractor={(item) => item.id.toString()} renderItem={_renderItem} refreshing={isLoading} onRefresh={getAllTask} nestedScrollEnabled />

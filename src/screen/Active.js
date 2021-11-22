@@ -13,6 +13,7 @@ export default function Active(props) {
     id: '',
   });
   const [isModalVisible, setModalVisible] = useState(false);
+  const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
 
@@ -121,6 +122,7 @@ export default function Active(props) {
     return (
       <Content
         //
+        show={show}
         active={true}
         text={item.body}
         onPress={() => props.navigation.navigate('DetailTask', item)}
@@ -146,7 +148,7 @@ export default function Active(props) {
           })
         }
       />
-      <Header value={form} onChangeText={(text) => setForm(text)} onPress={handleSubmit} />
+      <Header value={form} onChangeText={(text) => setForm(text)} onPress={handleSubmit} onShowPress={() => setShow(!show)} />
       <View style={styles.wrapper}>
         {tasks.length > 0 ? (
           <FlatList data={tasks} keyExtractor={(item) => item.id.toString()} renderItem={_renderItem} refreshing={isLoading} onRefresh={getAllTask} nestedScrollEnabled />
