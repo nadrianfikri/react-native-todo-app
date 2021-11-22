@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API } from '../config';
+import axios from 'axios';
 
 import { StyleSheet, View, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -12,22 +13,26 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
 
-  // Create Function to fetch
-  const getAllTask = async () => {
-    try {
-      setIsLoading(true);
-      const response = await API.get('/task');
-
-      console.log(response);
-      setTasks(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   // Create LifeCycle
   useEffect(() => {
     getAllTask();
   }, []);
+
+  // Create Function to fetch
+  const getAllTask = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get('http://192.168.43.203:5000/api/v1/task');
+
+      setTasks(response.data.data);
+      setIsLoading(false);
+    } catch (error) {
+      alert(error.message);
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
+  // console.log(tasks);
 
   // post data
   // const handleSubmit = () => {
@@ -49,10 +54,10 @@ export default function Home() {
   //     });
   // };
 
+  // component list render
   const _renderItem = ({ item }) => {
     return <Content text={item.body} />;
   };
-  console.log(form);
   return (
     <View style={styles.container}>
       <Header value={form} onChangeText={(text) => setForm(text)} onPress={'handleSubmit'} />
