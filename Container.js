@@ -16,6 +16,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import Home from './src/screen/Home';
 import Active from './src/screen/Active';
 import Completed from './src/screen/Completed';
+import DetailTask from './src/screen/DetailTask';
 
 // Create Stack Navigation
 const Stack = createStackNavigator();
@@ -58,7 +59,6 @@ function CustomTab() {
 }
 
 // Create Component Bottom Tab Navigation
-
 export default function Container() {
   return (
     <NavigationContainer>
@@ -70,16 +70,17 @@ export default function Container() {
             headerShown: false,
           }}
         />
-        {/* <Stack.Screen
-          name="Home"
-          component={Home}
+        <Stack.Screen
+          name="DetailTask"
+          component={DetailTask}
           options={{
-            title: 'Home',
+            title: 'Detail Task',
             headerMode: 'screen',
             headerTintColor: 'white',
-            headerStyle: { backgroundColor: 'gray' },
+            headerStyle: { backgroundColor: 'hsl(235, 24%, 19%)' },
+            gestureDirection: 'horizontal-inverted',
           }}
-        /> */}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

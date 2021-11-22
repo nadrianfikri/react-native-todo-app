@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { ImageBackground, StyleSheet, Text, View } from 'react-native';
@@ -6,11 +7,10 @@ import Home from './src/screen/Home';
 
 export default function App() {
   return (
-    <Container />
-    // <View style={styles.container}>
-    //   <StatusBar style="light" />
-    //   <Home />
-    // </View>
+    <>
+      <StatusBar style="light" />
+      <Container />
+    </>
   );
 }
 
