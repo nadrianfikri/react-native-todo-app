@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Image, Alert } from 'react-native';
+import ModalComp from '../components/ModalComp';
 import Header from '../components/Header';
 import Content from '../components/Content';
 
 export default function Active(props) {
   const [form, setForm] = useState('');
+  const [editForm, setEditForm] = useState({
+    body: '',
+    id: '',
+  });
+  const [isModalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
 
@@ -33,6 +39,12 @@ export default function Active(props) {
   // post data
   const handleSubmit = async () => {
     try {
+      // alert when form empty
+      if (form === '') {
+        Alert.alert('Form is empty', 'Please input your task', [{ text: 'OK' }]);
+        return;
+      }
+
       const body = {
         body: form,
       };
@@ -73,6 +85,37 @@ export default function Active(props) {
     }
   };
 
+  // Edit data
+  const handleEdit = async () => {
+    try {
+      // alert when form empty
+      if (editForm.body === '') {
+        Alert.alert('Form is empty', 'Please input your task', [{ text: 'OK' }]);
+        return;
+      }
+
+      const id = editForm.id;
+      const body = {
+        body: editForm.body,
+      };
+
+      // update database
+      await axios.patch(`http://192.168.43.203:5000/api/v1/task/${id}`, body);
+
+      setModalVisible(false);
+      getAllTask();
+    } catch (error) {
+      alert(error.message);
+      console.log(error);
+    }
+  };
+
+  // show modal and get data
+  const showModal = (value) => {
+    setModalVisible(true);
+    setEditForm(value);
+  };
+
   // component list render
   const _renderItem = ({ item }) => {
     return (
@@ -82,6 +125,7 @@ export default function Active(props) {
         text={item.body}
         onPress={() => props.navigation.navigate('DetailTask', item)}
         onCheckPress={() => handleCheckButton(item.id)}
+        onEditPress={() => showModal(item)}
         onDeletePress={() => handleDeleteButton(item.id)}
       />
     );
@@ -89,9 +133,36 @@ export default function Active(props) {
 
   return (
     <View style={styles.container}>
+      <ModalComp
+        //
+        isVisible={isModalVisible}
+        closeBtn={() => setModalVisible(false)}
+        saveBtn={handleEdit}
+        value={editForm?.body}
+        onChangeText={(text) =>
+          setEditForm({
+            ...editForm,
+            body: text,
+          })
+        }
+      />
       <Header value={form} onChangeText={(text) => setForm(text)} onPress={handleSubmit} />
       <View style={styles.wrapper}>
-        <FlatList data={tasks} keyExtractor={(item) => item.id.toString()} renderItem={_renderItem} refreshing={isLoading} onRefresh={getAllTask} nestedScrollEnabled />
+        {tasks.length > 0 ? (
+          <FlatList data={tasks} keyExtractor={(item) => item.id.toString()} renderItem={_renderItem} refreshing={isLoading} onRefresh={getAllTask} nestedScrollEnabled />
+        ) : (
+          <FlatList
+            //
+            data={['There is no data']}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => {
+              return <Image source={require('../../assets/images/list2.png')} key={item} style={{ width: 400, height: 400, alignSelf: 'center', marginTop: 30 }} />;
+            }}
+            refreshing={isLoading}
+            onRefresh={getAllTask}
+            nestedScrollEnabled
+          />
+        )}
       </View>
     </View>
   );

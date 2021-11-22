@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Image, Alert } from 'react-native';
 
 import ModalComp from '../components/ModalComp';
 import Header from '../components/Header';
@@ -13,8 +13,9 @@ export default function Home(props) {
     body: '',
     id: '',
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [show, setShow] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState([]);
 
   // Create LifeCycle
@@ -40,6 +41,12 @@ export default function Home(props) {
   // post data
   const handleSubmit = async () => {
     try {
+      // alert when form is empty
+      if (form === '') {
+        Alert.alert('Form is empty', 'Please input your task', [{ text: 'OK' }]);
+        return;
+      }
+
       const body = {
         body: form,
       };
@@ -68,9 +75,26 @@ export default function Home(props) {
     }
   };
 
+  // delete data
+  const handleDeleteButton = async (id) => {
+    try {
+      await axios.delete(`http://192.168.43.203:5000/api/v1/task/${id}`);
+
+      getAllTask();
+    } catch (error) {
+      alert(error.message);
+      console.log(error);
+    }
+  };
+
   // Edit data
   const handleEdit = async () => {
     try {
+      // alert when form empty
+      if (editForm.body === '') {
+        Alert.alert('Form is empty', 'Please input your task', [{ text: 'OK' }]);
+        return;
+      }
       const id = editForm.id;
       const body = {
         body: editForm.body,
@@ -86,29 +110,17 @@ export default function Home(props) {
       console.log(error);
     }
   };
-  // delete data
-  const handleDeleteButton = async (id) => {
-    try {
-      await axios.delete(`http://192.168.43.203:5000/api/v1/task/${id}`);
-
-      getAllTask();
-    } catch (error) {
-      alert(error.message);
-      console.log(error);
-    }
-  };
-
   // show modal and get data
   const showModal = (value) => {
     setModalVisible(true);
     setEditForm(value);
   };
-
   // component list render
   const _renderItem = ({ item }) => {
     return (
       <Content
         //
+        show={show}
         text={item.body}
         active={item.status === 'active' ? true : false}
         onPress={() => props.navigation.navigate('DetailTask', item)}
@@ -133,9 +145,23 @@ export default function Home(props) {
           })
         }
       />
-      <Header value={form} onChangeText={(text) => setForm(text)} onPress={handleSubmit} />
+      <Header value={form} onChangeText={(text) => setForm(text)} onPress={handleSubmit} onShowPress={() => setShow(!show)} />
       <View style={styles.wrapper}>
-        <FlatList data={tasks} keyExtractor={(item) => item.id.toString()} renderItem={_renderItem} refreshing={isLoading} onRefresh={getAllTask} nestedScrollEnabled />
+        {tasks.length > 0 ? (
+          <FlatList data={tasks} keyExtractor={(item) => item.id.toString()} renderItem={_renderItem} refreshing={isLoading} onRefresh={getAllTask} nestedScrollEnabled />
+        ) : (
+          <FlatList
+            //
+            data={['There is no data']}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => {
+              return <Image source={require('../../assets/images/list2.png')} key={item} style={{ width: 400, height: 400, alignSelf: 'center', marginTop: 30 }} />;
+            }}
+            refreshing={isLoading}
+            onRefresh={getAllTask}
+            nestedScrollEnabled
+          />
+        )}
       </View>
     </View>
   );

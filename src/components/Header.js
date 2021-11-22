@@ -1,12 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 
 export default function Header(props) {
   return (
     <ImageBackground source={require('../../assets/images/bg-mobile-dark.jpg')} resizeMode="cover" style={styles.container}>
       <View style={styles.wrapper}>
-        <Text style={styles.textTitle}>T O D O</Text>
+        <View style={styles.row}>
+          <Text style={styles.textTitle}>T O D O</Text>
+          <TouchableOpacity onPress={props.onShowPress}>
+            <FontAwesome5 name="edit" size={20} color="hsl(234, 39%, 85%)" />
+          </TouchableOpacity>
+        </View>
 
         <View style={{ position: 'relative' }}>
           <TextInput style={styles.input} placeholder="Create a New Task" placeholderTextColor="hsl(234, 11%, 52%)" onChangeText={props.onChangeText} value={props.value} />
@@ -64,5 +69,10 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     color: 'white',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Alert, Image } from 'react-native';
 import Header from '../components/Header';
 import Content from '../components/Content';
 
@@ -23,7 +23,6 @@ export default function Completed(props) {
       setTasks(response.data.data);
       setIsLoading(false);
     } catch (error) {
-      alert(error.message);
       console.log(error);
       setIsLoading(false);
     }
@@ -32,6 +31,12 @@ export default function Completed(props) {
   // post data
   const handleSubmit = async () => {
     try {
+      // alert when form empty
+      if (form === '') {
+        Alert.alert('Form is empty', 'Please input your task', [{ text: 'OK' }]);
+        return;
+      }
+
       const body = {
         body: form,
       };
@@ -73,7 +78,21 @@ export default function Completed(props) {
     <View style={styles.container}>
       <Header value={form} onChangeText={(text) => setForm(text)} onPress={handleSubmit} />
       <View style={styles.wrapper}>
-        <FlatList data={tasks} keyExtractor={(item) => item.id.toString()} renderItem={_renderItem} refreshing={isLoading} onRefresh={getAllTask} nestedScrollEnabled />
+        {tasks.length > 0 ? (
+          <FlatList data={tasks} keyExtractor={(item) => item.id.toString()} renderItem={_renderItem} refreshing={isLoading} onRefresh={getAllTask} nestedScrollEnabled />
+        ) : (
+          <FlatList
+            //
+            data={['There is no data']}
+            keyExtractor={(item) => item}
+            renderItem={({ item }) => {
+              return <Image source={require('../../assets/images/list2.png')} key={item} style={{ width: 400, height: 400, alignSelf: 'center', marginTop: 30 }} />;
+            }}
+            refreshing={isLoading}
+            onRefresh={getAllTask}
+            nestedScrollEnabled
+          />
+        )}
       </View>
     </View>
   );

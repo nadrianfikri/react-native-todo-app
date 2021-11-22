@@ -13,14 +13,18 @@ export default function Content(props) {
           <TouchableOpacity onPress={props.onPress} style={{ flex: 1, marginLeft: 10 }}>
             <Text style={styles.text}>{props.text}</Text>
           </TouchableOpacity>
-          <View style={styles.row}>
-            <TouchableOpacity onPress={props.onEditPress} style={styles.row}>
-              <AntDesign name="edit" size={24} color="hsl(234, 39%, 85%)" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={props.onDeletePress} style={styles.row}>
-              <AntDesign name="delete" size={24} color="hsl(234, 39%, 85%)" />
-            </TouchableOpacity>
-          </View>
+          {props.show ? (
+            <View style={styles.row}>
+              <TouchableOpacity onPress={props.onEditPress} style={styles.row}>
+                <AntDesign name="edit" size={24} color="hsl(234, 39%, 85%)" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={props.onDeletePress} style={styles.row}>
+                <AntDesign name="delete" size={24} color="hsl(234, 39%, 85%)" />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <></>
+          )}
         </>
       ) : (
         <>
@@ -30,11 +34,16 @@ export default function Content(props) {
           <TouchableOpacity onPress={props.onPress} style={{ flex: 1, marginLeft: 10 }}>
             <Text style={styles.active}>{props.text}</Text>
           </TouchableOpacity>
-          <View style={styles.row}>
-            <TouchableOpacity onPress={props.onDeletePress} style={styles.row}>
-              <AntDesign name="delete" size={24} color="hsl(234, 39%, 85%)" />
-            </TouchableOpacity>
-          </View>
+
+          {props.show ? (
+            <View style={styles.row}>
+              <TouchableOpacity onPress={props.onDeletePress} style={styles.row}>
+                <AntDesign name="delete" size={24} color="hsl(234, 39%, 85%)" />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <></>
+          )}
         </>
       )}
     </View>
