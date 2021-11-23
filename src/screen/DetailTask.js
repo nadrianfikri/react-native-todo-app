@@ -5,7 +5,6 @@ import { StyleSheet, Text, View, ImageBackground, Image } from 'react-native';
 export default function DetailTask(props) {
   // init params
   const id = props.route.params.id;
-  const status = props.route.params.status;
   //   init state
   const [isLoading, setIsLoading] = useState(false);
   const [detail, setDetail] = useState([]);
@@ -28,7 +27,6 @@ export default function DetailTask(props) {
       setIsLoading(false);
     }
   };
-  // console.log(new Date().toTimeString());
   useEffect(() => {
     getDetail();
   }, []);
