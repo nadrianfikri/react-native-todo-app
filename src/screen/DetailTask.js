@@ -13,7 +13,7 @@ export default function DetailTask(props) {
   const getDetail = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://192.168.43.203:5000/api/v1/task/${id}`);
+      const response = await axios.get(`https://todo-mobile-api.herokuapp.com/api/v1/task/${id}`);
       const data = response.data.data;
       data.timeCreate = new Date(data.createdAt).toLocaleTimeString('en-GB');
       data.timeUpdate = new Date(data.updatedAt).toLocaleTimeString('en-GB');

@@ -19,7 +19,7 @@ export default function Completed(props) {
   const getAllTask = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://192.168.43.203:5000/api/v1/task/status/done');
+      const response = await axios.get('https://todo-mobile-api.herokuapp.com/api/v1/task/status/done');
 
       setTasks(response.data.data);
       setIsLoading(false);
@@ -41,7 +41,7 @@ export default function Completed(props) {
       const body = {
         body: form,
       };
-      await axios.post('http://192.168.43.203:5000/api/v1/task', body);
+      await axios.post('https://todo-mobile-api.herokuapp.com/api/v1/task', body);
 
       setForm('');
       getAllTask();
@@ -54,7 +54,7 @@ export default function Completed(props) {
   // delete data
   const handleDeleteButton = async (id) => {
     try {
-      await axios.delete(`http://192.168.43.203:5000/api/v1/task/${id}`);
+      await axios.delete(`https://todo-mobile-api.herokuapp.com/api/v1/task/${id}`);
 
       getAllTask();
     } catch (error) {

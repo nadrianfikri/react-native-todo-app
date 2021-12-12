@@ -27,7 +27,7 @@ export default function Home(props) {
   const getAllTask = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://192.168.43.203:5000/api/v1/task');
+      const response = await axios.get('https://todo-mobile-api.herokuapp.com/api/v1/task');
 
       setTasks(response.data.data);
       setIsLoading(false);
@@ -50,7 +50,7 @@ export default function Home(props) {
       const body = {
         body: form,
       };
-      await axios.post('http://192.168.43.203:5000/api/v1/task', body);
+      await axios.post('https://todo-mobile-api.herokuapp.com/api/v1/task', body);
 
       setForm('');
       getAllTask();
@@ -66,7 +66,7 @@ export default function Home(props) {
       const body = {
         status: 'done',
       };
-      await axios.patch(`http://192.168.43.203:5000/api/v1/task/${id}`, body);
+      await axios.patch(`https://todo-mobile-api.herokuapp.com/api/v1/task/${id}`, body);
 
       getAllTask();
     } catch (error) {
@@ -78,7 +78,7 @@ export default function Home(props) {
   // delete data
   const handleDeleteButton = async (id) => {
     try {
-      await axios.delete(`http://192.168.43.203:5000/api/v1/task/${id}`);
+      await axios.delete(`https://todo-mobile-api.herokuapp.com/api/v1/task/${id}`);
 
       getAllTask();
     } catch (error) {
@@ -101,7 +101,7 @@ export default function Home(props) {
       };
 
       // update database
-      await axios.patch(`http://192.168.43.203:5000/api/v1/task/${id}`, body);
+      await axios.patch(`https://todo-mobile-api.herokuapp.com/api/v1/task/${id}`, body);
 
       setModalVisible(false);
       getAllTask();
