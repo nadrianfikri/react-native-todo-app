@@ -22,6 +22,7 @@
     "android": {
       "package": "com.dumbways.nadtodoapp",
       "versionCode": 1,
+      "enableDangerousExperimentalLeanBuilds": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/todo-icon.png",
         "backgroundColor": "#161721"
